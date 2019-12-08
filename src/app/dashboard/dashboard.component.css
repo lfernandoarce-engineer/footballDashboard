@@ -1,21 +1,8 @@
-.grid-container {
-  margin: 20px;
+mat-card {
+  font-size: 15px;
 }
 
-.dashboard-card {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  right: 15px;
-  bottom: 15px;
-}
-
-.more-button {
-  position: absolute;
-  top: 5px;
-  right: 10px;
-}
-
-.dashboard-card-content {
-  text-align: center;
+.cardHeader, 
+mat-card-content div span:nth-child(1) {
+  font-weight: bold;  
 }

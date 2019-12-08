@@ -1,22 +1,32 @@
 <div class="grid-container">
   <h1 class="mat-h1">Dashboard</h1>
-  <mat-grid-list cols="2" rowHeight="350px">
+  <mat-grid-list cols="5" rowHeight="350px">
     <mat-grid-tile *ngFor="let card of cards" [colspan]="1" [rowspan]="1">
       <mat-card class="dashboard-card">
         <mat-card-header>
           <mat-card-title>
-            {{card.title}}
-            <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
-              <mat-icon>more_vert</mat-icon>
+            <span class="cardHeader">{{card.title}}</span> 
+            <button mat-icon-button class="more-button" aria-label="Toggle menu">
+              <mat-icon>details</mat-icon>
             </button>
-            <mat-menu #menu="matMenu" xPosition="before">
-              <button mat-menu-item>Expand</button>
-              <button mat-menu-item>Remove</button>
-            </mat-menu>
           </mat-card-title>
         </mat-card-header>
         <mat-card-content class="dashboard-card-content">
-          <div>Card Content Here</div>
+          <div>
+            <span>Area: </span><span>{{ card.area }}</span>
+          </div>
+          <div>
+            <span>Teams number: </span><span>{{ card.teamsNumber }}</span>
+          </div>
+          <div>
+            <span>Season match day: </span><span>{{ card.currentSeasonMatchDay }}</span>
+          </div>
+          <div>
+            <span>Season start date: </span><span>{{ card.currentSeasonStartDate }}</span>
+          </div>
+          <div>
+            <span>Season end date: </span><span>{{ card.currentSeasonEndDate }}</span>
+          </div>
         </mat-card-content>
       </mat-card>
     </mat-grid-tile>

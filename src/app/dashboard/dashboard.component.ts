@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Competition } from '../store/models/competition';
 import { CompetitionsState, selectCompetitions } from '../store/reducers/competitions.reducer';
-import { map } from 'rxjs/operators';
-import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
+import { CurrentSeason } from '../store/models/currentSeason';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Store, select } from '@ngrx/store';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -30,17 +28,34 @@ export class DashboardComponent {
         });
   }
 
-  constructor(private http: HttpClient, private store: Store<CompetitionsState>, private breakpointObserver: BreakpointObserver) {
+  constructor(private http: HttpClient, private store: Store<CompetitionsState>) {
     store.pipe(select(selectCompetitions)).subscribe( //TODO: Unsubscribe On Destroy
       (competitions : CompetitionsState) => {
         if (competitions && (competitions instanceof Array)) {
           this.cards = competitions.map((comp) => {
-            return { title: comp.name, cols: 1, rows: 1};
+            let currentSeasonData = this.getCurrentSeasonData(comp.currentSeason);
+
+            return { 
+                     id: comp.id,
+                     title: comp.name, 
+                     area: comp.area ? comp.area.name: 'NA', 
+                     teamsNumber: '1', 
+                     currentSeasonMatchDay: currentSeasonData.currentSeasonMatchday,
+                     currentSeasonStartDate: currentSeasonData.currentSeasonStartDate, 
+                     currentSeasonEndDate: currentSeasonData.currentSeasonEndDate };
           });
 
           this.cards.forEach((card) => console.log(card.title));
         }
       });
+    }
+
+    getCurrentSeasonData(currentSeason : CurrentSeason) {
+      return  {
+        currentSeasonMatchday: currentSeason && currentSeason.currentMatchday ? currentSeason.currentMatchday: 'NA',
+        currentSeasonStartDate: currentSeason && currentSeason.startDate ? currentSeason.startDate: 'NA',
+        currentSeasonEndDate: currentSeason && currentSeason.endDate ? currentSeason.endDate: 'NA'   
+      }
     }
 }
 
@@ -49,26 +64,11 @@ export interface CompetitionsResponse {
 }
 
 export interface CardData {
+  id: number,
   title: string
+  area: string, 
+  teamsNumber: string, 
+  currentSeasonMatchDay: string, 
+  currentSeasonStartDate: string, 
+  currentSeasonEndDate: string
 }
-
-/** Based on the screen size, switch from standard to one column per row */
-  // cards = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
-  //   map(({ matches }) => {
-  //     if (matches) {
-  //       return [
-  //         { title: 'Card 1', cols: 1, rows: 1 },
-  //         { title: 'Card 2', cols: 1, rows: 1 },
-  //         { title: 'Card 3', cols: 1, rows: 1 },
-  //         { title: 'Card 4', cols: 1, rows: 1 }
-  //       ];
-  //     }
-
-  //     return [
-  //       { title: 'Card 1', cols: 2, rows: 1 },
-  //       { title: 'Card 2', cols: 1, rows: 1 },
-  //       { title: 'Card 3', cols: 1, rows: 2 },
-  //       { title: 'Card 4', cols: 1, rows: 1 }
-  //     ];
-  //   })
-  // );

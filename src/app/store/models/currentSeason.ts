@@ -1,8 +1,8 @@
 export class CurrentSeason {
     id: number;
-    currentMatchday: number;
-    startDate: Date;
-    endDate: Date;
+    currentMatchday: string;
+    startDate: string;
+    endDate: string;
 
     constructor(data: any) {
         Object.assign(this, data);
