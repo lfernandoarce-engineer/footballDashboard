@@ -12,11 +12,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { LayoutModule } from '@angular/cdk/layout';
 import { reducers } from './store/reducers';
 import { StoreModule } from '@ngrx/store';
+import { CompetitionDetailsComponent } from './competition-details/competition-details.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent
+    DashboardComponent,
+    CompetitionDetailsComponent
   ],
   imports: [
     BrowserModule,
