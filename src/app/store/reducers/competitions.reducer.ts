@@ -1,6 +1,7 @@
 
 import { Competition } from '../models/competition';
 import { createSelector } from '@ngrx/store';
+import { Teams } from '../models/teams';
 
 export interface CompetitionsState {
     competitions: Competition[]
@@ -17,9 +18,23 @@ export function competitionsReducer(competitionsState = initialCompetitionsState
                 ...competitionsState,
                 competitions: action.payload
             };
-    }
+            return competitionsState;
+        case 'SET_COMPETITION_TEAMS':
+            let newState = {...competitionsState};
 
-    return competitionsState;
+            newState.competitions = newState.competitions.map((comp) => {
+                                if(comp.id == action.payload.compId) {
+                                    comp.teams = action.payload.teams;
+                                    comp.teamsNumber = action.payload.teamsNumber;                    
+                                }
+                                
+                                return comp;
+                            });
+        
+            return newState;
+        default:
+            return competitionsState
+    }
 }
 
 

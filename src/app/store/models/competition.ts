@@ -9,7 +9,7 @@ export class Competition {
     currentSeason: CurrentSeason;
     lastUpdated: Date;
     teamsNumber: number;
-    teams: Teams;
+    teams: Teams[];
 
     constructor(data: any) {
       Object.assign(this, data);
