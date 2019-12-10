@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
+
 import { CompetitionsState, selectCompetitions } from '../store/reducers/competitions.reducer';
 import { CurrentSeason } from '../store/models/currentSeason';
 import { CompetitionsResponse, CompetitionTeamsResponse } from '../dtos';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Store, select } from '@ngrx/store';
 
 @Component({
@@ -18,12 +20,13 @@ export class DashboardComponent {
     this.performHttpRequest('v2/competitions?areas=2077&plan=TIER_ONE') //Filtered by Europe Area and free account  
         .then((response : CompetitionsResponse) => {
             if (response && response.competitions) {
+              let competitions = response.competitions.splice(5, 1); //TODO: Testing proposes 
               this.store.dispatch({
                 type: 'SET_COMPETITIONS',
-                payload: response.competitions
+                payload: competitions
               });
 
-              response.competitions.forEach((comp) => this.getCompetitionTeamsDetails(comp.id));
+              competitions.forEach((comp) => this.getCompetitionTeamsDetails(comp.id));
             }
         });
   }
@@ -48,13 +51,18 @@ export class DashboardComponent {
     }
   }
 
+  goToCompetitionDetails(compId) {
+    this.router.navigate(['comp-details'], {queryParams: {compId: compId}});
+  }
+
+  //TODO: Handle this in a Service??
   performHttpRequest(resource) {
     return this.http.get(`https://api.football-data.org/${resource}`, //Filtered by Europe Area
                   { headers: this.headers })
                     .toPromise();
   }
 
-  constructor(private http: HttpClient, private store: Store<CompetitionsState>) {
+  constructor(private http: HttpClient, private store: Store<CompetitionsState>, private router: Router) {
     store.pipe(select(selectCompetitions)).subscribe( //TODO: Unsubscribe On Destroy
       (competitions : CompetitionsState) => {
         if (competitions && (competitions instanceof Array)) {

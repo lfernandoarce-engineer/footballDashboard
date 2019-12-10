@@ -33,7 +33,7 @@ export function competitionsReducer(competitionsState = initialCompetitionsState
         
             return newState;
         default:
-            return competitionsState
+            return competitionsState;
     }
 }
 

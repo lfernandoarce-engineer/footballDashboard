@@ -1,1 +1,63 @@
-<p>competition-details works!</p>
+<div>
+    <div class="compDescription" *ngIf="competition != null">
+        <div><label for="name">Competition:</label><span id="name">{{ competition.name }}</span></div>
+        <div><label for="areaName">Area:</label><span id="areaName">{{ competition.area.name }}</span></div> 
+        <div><label for="lastUpdated">Last Updated:</label><span id="lastUpdated">{{ competition.lastUpdated }}</span></div>
+        <div><label for="startDate">Start Date:</label><span id="startDate">{{ competition.currentSeason.startDate }}</span></div>
+        <div><label for="endDate">End Date:</label><span id="endDate">{{ competition.currentSeason.endDate }}</span></div>
+    </div>
+    <div class="compStandings">
+        <table mat-table [dataSource]="standings" class="">
+            <ng-container matColumnDef="Name">
+                <th mat-header-cell *matHeaderCellDef>Name</th>
+                <td mat-cell *matCellDef="let element"> {{element.team.name}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Logo">
+                <th mat-header-cell *matHeaderCellDef>Logo</th>
+                <td mat-cell *matCellDef="let element"> 
+                    <!-- <mat-icon svgIcon="{{element.team.crestUrl}}" aria-hidden="false" aria-label="Team Logo"></mat-icon>-->
+                    <img class="logo" src="{{element.team.crestUrl}}" />
+                </td> 
+            </ng-container>
+            <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef>Position</th>
+                <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+            </ng-container>
+            <ng-container matColumnDef="played">
+                <th mat-header-cell *matHeaderCellDef>Played</th>
+                <td mat-cell *matCellDef="let element"> {{element.playedGames}} </td>
+            </ng-container>
+            <ng-container matColumnDef="won">
+                <th mat-header-cell *matHeaderCellDef>Won</th>
+                <td mat-cell *matCellDef="let element"> {{element.won}} </td>
+            </ng-container>
+            <ng-container matColumnDef="draw">
+                <th mat-header-cell *matHeaderCellDef>Draw</th>
+                <td mat-cell *matCellDef="let element"> {{element.draw}} </td>
+            </ng-container>
+            <ng-container matColumnDef="lost">
+                <th mat-header-cell *matHeaderCellDef>Lost</th>
+                <td mat-cell *matCellDef="let element"> {{element.lost}} </td>
+            </ng-container>
+            <ng-container matColumnDef="points">
+                <th mat-header-cell *matHeaderCellDef>Points</th>
+                <td mat-cell *matCellDef="let element"> {{element.points}} </td>
+            </ng-container>
+            <ng-container matColumnDef="goalsFavor">
+                <th mat-header-cell *matHeaderCellDef>Goals For</th>
+                <td mat-cell *matCellDef="let element"> {{element.goalsFor}} </td>
+            </ng-container>
+            <ng-container matColumnDef="goalsAgainst">
+                <th mat-header-cell *matHeaderCellDef>Goals Against</th>
+                <td mat-cell *matCellDef="let element"> {{element.goalsAgainst}} </td>
+            </ng-container>
+            <ng-container matColumnDef="goalDifference">
+                <th mat-header-cell *matHeaderCellDef>Goal Difference</th>
+                <td mat-cell *matCellDef="let element"> {{element.goalDifference}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (clicks)="showTeamDetails(element.team.name)"></tr>
+            <ng-container></ng-container>
+        </table>
+    </div>
+</div>

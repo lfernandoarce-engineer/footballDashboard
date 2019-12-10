@@ -6,7 +6,7 @@
         <mat-card-header>
           <mat-card-title>
             <span class="cardHeader">{{card.title}}</span> 
-            <button mat-icon-button class="more-button" aria-label="Toggle menu">
+            <button mat-icon-button class="more-button" aria-label="Toggle menu" (click)="goToCompetitionDetails(card.id)">
               <mat-icon>details</mat-icon>
             </button>
           </mat-card-title>
