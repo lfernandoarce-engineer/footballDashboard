@@ -15,18 +15,21 @@ import { Store, select } from '@ngrx/store';
 export class DashboardComponent {
   headers = new HttpHeaders().append("X-Auth-Token", "d9b2c29baac94818a4908116a55d6f08");
   cards: CardData[];
+  retrieveTeamsNumber = false;
 
   ngOnInit() {
     this.performHttpRequest('v2/competitions?areas=2077&plan=TIER_ONE') //Filtered by Europe Area and free account  
         .then((response : CompetitionsResponse) => {
             if (response && response.competitions) {
-              let competitions = response.competitions.splice(5, 1); //TODO: Testing proposes 
+              let competitions = response.competitions; 
               this.store.dispatch({
                 type: 'SET_COMPETITIONS',
                 payload: competitions
               });
 
-              competitions.forEach((comp) => this.getCompetitionTeamsDetails(comp.id));
+              if (this.retrieveTeamsNumber) {
+                competitions.forEach((comp) => this.getCompetitionTeamsDetails(comp.id));
+              }
             }
         });
   }

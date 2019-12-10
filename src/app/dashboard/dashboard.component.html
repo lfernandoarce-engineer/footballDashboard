@@ -1,14 +1,10 @@
 <div class="grid-container">
-  <h1 class="mat-h1">Dashboard</h1>
-  <mat-grid-list cols="5" rowHeight="350px">
+  <mat-grid-list cols="3" rowHeight="200px">
     <mat-grid-tile *ngFor="let card of cards" [colspan]="1" [rowspan]="1">
-      <mat-card class="dashboard-card">
+      <mat-card class="dashboard-card mat-elevation-z8" (click)="goToCompetitionDetails(card.id)">
         <mat-card-header>
           <mat-card-title>
             <span class="cardHeader">{{card.title}}</span> 
-            <button mat-icon-button class="more-button" aria-label="Toggle menu" (click)="goToCompetitionDetails(card.id)">
-              <mat-icon>details</mat-icon>
-            </button>
           </mat-card-title>
         </mat-card-header>
         <mat-card-content class="dashboard-card-content">
