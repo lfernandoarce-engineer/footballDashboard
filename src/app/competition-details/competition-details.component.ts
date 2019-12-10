@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { CompetitionDetailsState, selectCompetitionDetails } from '../store/reducers/competition-details.reducer';
@@ -10,6 +10,7 @@ import { Standings } from '../store/models/standings';
 import { StandingTeam } from '../store/models/standingTeam';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { TeamDetailsDialog } from './team-details-dialog.component';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -17,7 +18,7 @@ import { TeamDetailsDialog } from './team-details-dialog.component';
   templateUrl: './competition-details.component.html',
   styleUrls: ['./competition-details.component.css']
 })
-export class CompetitionDetailsComponent implements OnInit {
+export class CompetitionDetailsComponent implements OnInit, OnDestroy {
   headers = new HttpHeaders().append("X-Auth-Token", "d9b2c29baac94818a4908116a55d6f08");
   standings: StandingTeam[];
   competition:  Competition;//new Competition({ area: {}, currentSeason: {}});
@@ -25,11 +26,13 @@ export class CompetitionDetailsComponent implements OnInit {
                                 'Logo', 'position', 
                                 'played', 'won', 
                                 'draw', 'lost', 'points', 'goalsFavor', 'goalsAgainst', 'goalDifference'];
+  compDetailSub: Subscription;
+
 
   constructor(private activatedRoute: ActivatedRoute, private store: Store<CompetitionDetailsState> ,
               private http: HttpClient, private dialog: MatDialog, 
               private router: Router) {
-    store.pipe(select(selectCompetitionDetails)).subscribe( //TODO: Unsubscribe On Destroy
+    this.compDetailSub = store.pipe(select(selectCompetitionDetails)).subscribe( //TODO: Unsubscribe On Destroy
       (competitionDet : CompetitionDetails) => {
         if (competitionDet) {
           this.standings = competitionDet.standings.table;
@@ -38,6 +41,10 @@ export class CompetitionDetailsComponent implements OnInit {
         }
       });
    }
+
+  ngOnDestroy() {
+    this.compDetailSub.unsubscribe();
+  }
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe((params) => {

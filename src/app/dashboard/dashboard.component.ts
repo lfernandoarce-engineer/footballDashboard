@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -6,16 +6,18 @@ import { CompetitionsState, selectCompetitions } from '../store/reducers/competi
 import { CurrentSeason } from '../store/models/currentSeason';
 import { CompetitionsResponse, CompetitionTeamsResponse } from '../dtos';
 import { Store, select } from '@ngrx/store';
+import { Subscribable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnDestroy {
   headers = new HttpHeaders().append("X-Auth-Token", "d9b2c29baac94818a4908116a55d6f08");
   cards: CardData[];
   retrieveTeamsNumber = false;
+  dashboardDataSub: Subscription;
 
   ngOnInit() {
     this.performHttpRequest('v2/competitions?areas=2077&plan=TIER_ONE') //Filtered by Europe Area and free account  
@@ -66,7 +68,7 @@ export class DashboardComponent {
   }
 
   constructor(private http: HttpClient, private store: Store<CompetitionsState>, private router: Router) {
-    store.pipe(select(selectCompetitions)).subscribe( //TODO: Unsubscribe On Destroy
+    this.dashboardDataSub = store.pipe(select(selectCompetitions)).subscribe( //TODO: Unsubscribe On Destroy
       (competitions : CompetitionsState) => {
         if (competitions && (competitions instanceof Array)) {
           this.cards = competitions.map((comp) => {
@@ -82,6 +84,14 @@ export class DashboardComponent {
                      currentSeasonEndDate: currentSeasonData.currentSeasonEndDate };
             });
         }
+      });
+    }
+
+    ngOnDestroy() {
+      this.dashboardDataSub.unsubscribe();
+      this.store.dispatch({
+        type: 'SET_COMPETITIONS',
+        payload: {}
       });
     }
 }
