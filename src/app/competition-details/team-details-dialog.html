@@ -1,0 +1,36 @@
+<div *ngIf="team != null && team.area != null">
+    <div class="teamDescription">
+        <div><label for="team">Team:</label><span id="team">{{ team.name }}</span></div>
+        <div><label for="areaName">Area:</label><span id="areaName">{{ team.area.name }}</span></div> 
+        <div><label for="logo">Crest:</label><img class="logo" id="logo" src="{{ team.crestUrl }}" /></div>
+        <div><label for="address">Address:</label><span id="address">{{ team.address }}</span></div>
+        <div><label for="phone">Phone:</label><span id="phone">{{ team.phone }}</span></div>
+        <div><label for="website">WebSite:</label><span id="website">{{ team.website }}</span></div>
+        <div><label for="email">Email:</label><span id="email">{{ team.email }}</span></div>
+        <div><label for="founded">Founded:</label><span id="founded">{{ team.founded }}</span></div>
+        <div><label for="venue">Venue:</label><span id="venue">{{ team.venue }}</span></div>
+    </div>
+    <div>
+        <table mat-table [dataSource]="team.squad" class="">
+            <ng-container matColumnDef="player">
+                <th mat-header-cell *matHeaderCellDef>Name</th>
+                <td mat-cell *matCellDef="let element">{{element.name}}</td>
+            </ng-container>
+            <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef>Position</th>
+                <td mat-cell *matCellDef="let element">{{element.position}}</td> 
+            </ng-container>
+            <ng-container matColumnDef="nationality">
+                <th mat-header-cell *matHeaderCellDef>Nationality</th>
+                <td mat-cell *matCellDef="let element"> {{element.nationality}} </td>
+            </ng-container>
+            <ng-container matColumnDef="age">
+                <th mat-header-cell *matHeaderCellDef>Age</th>
+                <td mat-cell *matCellDef="let element"> {{element.age}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="teamPlayersColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: teamPlayersColumns;"></tr>
+            <ng-container></ng-container>
+        </table>
+    </div>
+</div>

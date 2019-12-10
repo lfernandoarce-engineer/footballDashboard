@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { CompetitionDetailsState, selectCompetitionDetails } from '../store/reducers/competition-details.reducer';
@@ -8,6 +8,9 @@ import { Competition } from '../store/models/competition';
 import { CurrentSeason } from '../store/models/currentSeason';
 import { Standings } from '../store/models/standings';
 import { StandingTeam } from '../store/models/standingTeam';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { TeamDetailsDialog } from './team-details-dialog.component';
+
 
 @Component({
   selector: 'app-competition-details',
@@ -23,7 +26,7 @@ export class CompetitionDetailsComponent implements OnInit {
                                 'played', 'won', 
                                 'draw', 'lost', 'points', 'goalsFavor', 'goalsAgainst', 'goalDifference'];
 
-  constructor(private activatedRoute: ActivatedRoute, private store: Store<CompetitionDetailsState> ,private http: HttpClient) {
+  constructor(private activatedRoute: ActivatedRoute, private store: Store<CompetitionDetailsState> ,private http: HttpClient, private dialog: MatDialog) {
     store.pipe(select(selectCompetitionDetails)).subscribe( //TODO: Unsubscribe On Destroy
       (competitionDet : CompetitionDetails) => {
         if (competitionDet) {
@@ -52,8 +55,13 @@ export class CompetitionDetailsComponent implements OnInit {
     });
   }
 
-  showTeamDetails(teamName) {
-    console.log(teamName);
+  showTeamDetails(teamId) {
+    const dialogRef = this.dialog.open(TeamDetailsDialog, {
+      width: '700px',
+      data: { teamId: teamId }
+    });
+
+    console.log(teamId);
   }
 
   //TODO: Handle this in a Service??
