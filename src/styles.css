@@ -4,3 +4,12 @@
 .logo {
     max-width: 15px !important;
 }
+
+.details label {
+    font-weight: bold;
+}
+
+.mat-cell:not(:first-child),
+.mat-header-cell:not(:first-child) {
+    padding: 10px 10px 10px 10px !important
+}

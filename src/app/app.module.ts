@@ -15,6 +15,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule  } from '@angular/material/table';
 import { LayoutModule } from '@angular/cdk/layout';
 import { RouterModule } from '@angular/router'
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 import { reducers } from './store/reducers';
 import { StoreModule } from '@ngrx/store';
@@ -53,6 +54,7 @@ import { MainMenuComponent } from './main-menu/main-menu.component';
     MatTableModule,
     MatTabsModule,
     LayoutModule,
+    FlexLayoutModule,
     RouterModule.forRoot([{
         path: '', //Default routing
         redirectTo: '/main-menu', 
