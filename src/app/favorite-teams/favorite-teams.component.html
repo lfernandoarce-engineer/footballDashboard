@@ -1,0 +1,28 @@
+<div>
+    <h1 class="mat-h1">Favorite teams</h1>
+    <div *ngIf="favoriteTeams != null && favoriteTeams.teams != null">
+        <table mat-table [dataSource]="favoriteTeams.teams" class="">
+            <ng-container matColumnDef="team">
+                <th mat-header-cell *matHeaderCellDef>Name</th>
+                <td mat-cell *matCellDef="let element">{{element.name}}</td>
+            </ng-container>
+            <ng-container matColumnDef="crest">
+                <th mat-header-cell *matHeaderCellDef>Logo</th>
+                <td mat-cell *matCellDef="let element">
+                    <img class="logo" src="{{element.crestUrl}}" />
+                </td> 
+            </ng-container>
+            <ng-container matColumnDef="moreInfo">
+                <th mat-header-cell *matHeaderCellDef>More Info</th>
+                <td mat-cell *matCellDef="let element">
+                    <button mat-icon-button aria-label="Team More information" (click)="showNextMatchInfo(element.id)">
+                        <mat-icon>more_horiz</mat-icon>
+                    </button>
+                </td> 
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="favoriteTeamsColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: favoriteTeamsColumns;"></tr>
+            <ng-container></ng-container>
+        </table>
+    </div>
+</div>

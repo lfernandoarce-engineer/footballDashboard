@@ -1,4 +1,7 @@
 <div>
+    <button mat-icon-button class="more-button" aria-label="Back to Dashboard" (click)="goBackToDashboard()">
+        <mat-icon>keyboard_return</mat-icon>
+    </button>
     <div class="compDescription" *ngIf="competition != null">
         <div><label for="name">Competition:</label><span id="name">{{ competition.name }}</span></div>
         <div><label for="areaName">Area:</label><span id="areaName">{{ competition.area.name }}</span></div> 

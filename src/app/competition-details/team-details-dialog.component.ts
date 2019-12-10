@@ -7,6 +7,8 @@ import { TeamDetailsState, selectTeamDetails } from '../store/reducers/team-deta
 import { Store, select } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { TeamPlayer } from '../store/models/teamPlayer';
+import { FavoriteTeamsState, selectFavoriteTeams } from '../store/reducers/favorite-teams.reducer';
+import { FavoriteTeams } from '../store/models/favoriteTeams';
 
 @Component({
     selector: 'team-details-dialog',
@@ -14,8 +16,10 @@ import { TeamPlayer } from '../store/models/teamPlayer';
   })
 export class TeamDetailsDialog implements OnDestroy {
     headers = new HttpHeaders().append("X-Auth-Token", "d9b2c29baac94818a4908116a55d6f08");
+    isOnFavorites: boolean;
     team: Teams;
     teamDetailsSubscribe: Subscription;
+    favoriteTeamsSubscribe: Subscription;
     teamPlayersColumns: string[] = ['player', 'position', 'nationality', 'age'];
     
     //TODO: Handle this in a Service??
@@ -27,14 +31,24 @@ export class TeamDetailsDialog implements OnDestroy {
 
 constructor(
     public dialogRef: MatDialogRef<TeamDetailsDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData, private http: HttpClient, private store: Store<TeamDetailsState>) {
+    @Inject(MAT_DIALOG_DATA) public data: DialogData, private http: HttpClient, 
+                             private store: Store<TeamDetailsState>, 
+                             private favoritesStore: Store<FavoriteTeamsState>) {
         this.teamDetailsSubscribe = 
             store.pipe(select(selectTeamDetails)).subscribe(
                 (teamDetails: Teams) => {
                     if (teamDetails) {
                         this.team = teamDetails;
-                    }
+                    }   
                 });
+        
+        this.favoriteTeamsSubscribe = 
+            favoritesStore.pipe(select(selectFavoriteTeams)).subscribe(
+                    (favTeams: FavoriteTeams) => {
+                        if (favTeams && this.data) {
+                            this.isOnFavorites = favTeams.teams.find((t) => t.id === this.data.teamId) != null ? true: false;
+                        }
+                    });
     }
 
     ngOnInit() {
@@ -50,6 +64,7 @@ constructor(
                             type: 'SET_TEAM_DETAILS',
                             payload: response
                         });
+
                     }
                 });
     }
@@ -62,8 +77,14 @@ constructor(
         });
     }
 
-    onNoClick(): void {
-        this.dialogRef.close();
+    setTeamFavorite(event) {
+        let type = event.checked ? 'ADD_FAVORITE_TEAM': 'REMOVE_FAVORITE_TEAM';
+        let payload =  event.checked ? this.team: { teamId: this.team.id}; 
+        
+        this.favoritesStore.dispatch({
+            type: type,
+            payload: payload
+        });
     }
 }
 

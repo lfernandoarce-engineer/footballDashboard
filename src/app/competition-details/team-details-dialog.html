@@ -9,6 +9,7 @@
         <div><label for="email">Email:</label><span id="email">{{ team.email }}</span></div>
         <div><label for="founded">Founded:</label><span id="founded">{{ team.founded }}</span></div>
         <div><label for="venue">Venue:</label><span id="venue">{{ team.venue }}</span></div>
+        <mat-checkbox (change)=setTeamFavorite($event) [(checked)]="isOnFavorites">Favorite</mat-checkbox>
     </div>
     <div>
         <table mat-table [dataSource]="team.squad" class="">

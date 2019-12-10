@@ -1,0 +1,6 @@
+<div *ngIf="nextMatch != null">
+    <div class="NextMatchDescription">
+        <div><label for="team">Versus: </label><span id="team">{{ nextMatch.againstTeam.name }}</span></div>
+        <div><label for="team">Hour: </label><span id="team">{{ nextMatch.utcDate }}</span></div>
+    </div>
+</div>

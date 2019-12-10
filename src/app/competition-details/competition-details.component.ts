@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit, Inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { CompetitionDetailsState, selectCompetitionDetails } from '../store/reducers/competition-details.reducer';
 import { CompetitionDetails } from '../store/models/competitionDetails';
@@ -26,7 +26,9 @@ export class CompetitionDetailsComponent implements OnInit {
                                 'played', 'won', 
                                 'draw', 'lost', 'points', 'goalsFavor', 'goalsAgainst', 'goalDifference'];
 
-  constructor(private activatedRoute: ActivatedRoute, private store: Store<CompetitionDetailsState> ,private http: HttpClient, private dialog: MatDialog) {
+  constructor(private activatedRoute: ActivatedRoute, private store: Store<CompetitionDetailsState> ,
+              private http: HttpClient, private dialog: MatDialog, 
+              private router: Router) {
     store.pipe(select(selectCompetitionDetails)).subscribe( //TODO: Unsubscribe On Destroy
       (competitionDet : CompetitionDetails) => {
         if (competitionDet) {
@@ -53,6 +55,10 @@ export class CompetitionDetailsComponent implements OnInit {
               }
             });
     });
+  }
+
+  goBackToDashboard() {
+    this.router.navigate(['main-menu']);
   }
 
   showTeamDetails(teamId) {
